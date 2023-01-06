@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PlaneApplication.Data;
+using PlaneApplication.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddAuthorization(options =>
         .Build();
 
 });
+
+builder.Services.AddScoped<IAuthorizationHandler, PlaneCreatorAuthorizationHandler>();
 
 var app = builder.Build();
 

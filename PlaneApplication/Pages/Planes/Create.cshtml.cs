@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PlaneApplication.Authorization;
 using PlaneApplication.Data;
 using PlaneApplication.Models;
 
 namespace PlaneApplication.Pages.Planes
 {
-    public class CreateModel : PageModel
+    public class CreateModel : DI_BasePageModel
     {
-        private readonly PlaneApplication.Data.ApplicationDbContext _context;
 
-        public CreateModel(PlaneApplication.Data.ApplicationDbContext context)
+        public CreateModel(
+            ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
         public IActionResult OnGet()
@@ -31,13 +36,17 @@ namespace PlaneApplication.Pages.Planes
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
-            _context.Plane.Add(Plane);
-            await _context.SaveChangesAsync();
+            Plane.CreatorId = UserManager.GetUserId(User);
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                User, Plane, PlaneOperations.Create);
+
+            if (isAuthorized.Succeeded == false)
+                return Forbid();
+
+            Context.Plane.Add(Plane);
+            await Context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

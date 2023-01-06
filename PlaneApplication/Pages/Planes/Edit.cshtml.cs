@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PlaneApplication.Authorization;
 using PlaneApplication.Data;
 using PlaneApplication.Models;
 
 namespace PlaneApplication.Pages.Planes
 {
-    public class EditModel : PageModel
+    public class EditModel : DI_BasePageModel
     {
-        private readonly PlaneApplication.Data.ApplicationDbContext _context;
-
-        public EditModel(PlaneApplication.Data.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
         [BindProperty]
@@ -25,34 +28,51 @@ namespace PlaneApplication.Pages.Planes
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Plane == null)
+            if (id == null || Context.Plane == null)
             {
                 return NotFound();
             }
 
-            var plane =  await _context.Plane.FirstOrDefaultAsync(m => m.PlaneId == id);
-            if (plane == null)
+           Plane = await Context.Plane.FirstOrDefaultAsync(m => m.PlaneId == id);
+            
+            if (Plane == null)
             {
                 return NotFound();
             }
-            Plane = plane;
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                User, Plane, PlaneOperations.Update);
+
+            if (isAuthorized.Succeeded == false)
+                return Forbid();
+
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
-            _context.Attach(Plane).State = EntityState.Modified;
+            var plane = await Context.Plane.AsNoTracking()
+                .SingleOrDefaultAsync(m => m.PlaneId == id);
+
+            if (plane == null)
+                return NotFound();
+
+            Plane.CreatorId = plane.CreatorId;
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                User, Plane, PlaneOperations.Update);
+
+            if (isAuthorized.Succeeded == false)
+                return Forbid();
+
+            Context.Attach(Plane).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,7 +91,7 @@ namespace PlaneApplication.Pages.Planes
 
         private bool PlaneExists(int id)
         {
-          return _context.Plane.Any(e => e.PlaneId == id);
+          return Context.Plane.Any(e => e.PlaneId == id);
         }
     }
 }

@@ -28,6 +28,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Planes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxhbmVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Planes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxhbmVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Planes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxhbmVzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Planes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxhbmVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Planes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxhbmVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/engin/source/repos/PlaneApplication/PlaneApplication/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

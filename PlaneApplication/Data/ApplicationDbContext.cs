@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PlaneApplication.Models;
 
 namespace PlaneApplication.Data
 {
@@ -9,5 +10,6 @@ namespace PlaneApplication.Data
             : base(options)
         {
         }
+        public DbSet<Plane> Plane { get; set; }
     }
 }

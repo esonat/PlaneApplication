@@ -1,0 +1,61 @@
+﻿@page
+@model PlaneApplication.Pages.Planes.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Plane</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlanePrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlanePrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneYear)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneYear)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneManifacturer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneManifacturer)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneSerialNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneSerialNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Plane.PlaneOwner)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Plane.PlaneOwner)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Plane?.PlaneId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

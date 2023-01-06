@@ -2,41 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using PlaneApplication.Authorization;
 using PlaneApplication.Data;
 using PlaneApplication.Models;
 
 namespace PlaneApplication.Pages.Planes
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : DI_BasePageModel
     {
-        private readonly PlaneApplication.Data.ApplicationDbContext _context;
-
-        public DetailsModel(PlaneApplication.Data.ApplicationDbContext context)
+        public DetailsModel(ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
       public Plane Plane { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Plane == null)
+            if (id == null || Context.Plane == null)
             {
                 return NotFound();
             }
 
-            var plane = await _context.Plane.FirstOrDefaultAsync(m => m.PlaneId == id);
-            if (plane == null)
+            Plane = await Context.Plane.FirstOrDefaultAsync(m => m.PlaneId == id);
+            
+            if (Plane == null)
             {
                 return NotFound();
             }
-            else 
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                User, Plane, PlaneOperations.Read);
+
+            if (isAuthorized.Succeeded == false)
+                return Forbid();
+            /*else 
             {
                 Plane = plane;
-            }
+            }*/
             return Page();
         }
     }

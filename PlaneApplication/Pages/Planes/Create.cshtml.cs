@@ -15,7 +15,6 @@ namespace PlaneApplication.Pages.Planes
 {
     public class CreateModel : DI_BasePageModel
     {
-
         public CreateModel(
             ApplicationDbContext context,
             IAuthorizationService authorizationService,

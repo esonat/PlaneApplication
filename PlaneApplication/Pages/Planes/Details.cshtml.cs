@@ -38,16 +38,27 @@ namespace PlaneApplication.Pages.Planes
                 return NotFound();
             }
 
-            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+            var isCreator = await AuthorizationService.AuthorizeAsync(
                 User, Plane, PlaneOperations.Read);
 
-            if (isAuthorized.Succeeded == false)
+            if (isCreator.Succeeded == false)
                 return Forbid();
             /*else 
             {
                 Plane = plane;
             }*/
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int id)
+        {
+
+            Plane = await Context.Plane.FindAsync(id);
+
+            if (Plane == null)
+                return NotFound();
+
+            return RedirectToPage("./Index");
         }
     }
 }

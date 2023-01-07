@@ -1,34 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlaneApplication.Data;
 using PlaneApplication.Models;
+using PlaneApplication.Authorization;
 
 namespace PlaneApplication.Pages.Planes
 {
     [AllowAnonymous]
-    public class IndexModel : PageModel
+    public class IndexModel : DI_BasePageModel
     {
-        private readonly PlaneApplication.Data.ApplicationDbContext _context;
 
-        public IndexModel(PlaneApplication.Data.ApplicationDbContext context)
-        {
-            _context = context;
+        public IndexModel(ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
+        { 
         }
 
-        public IList<Plane> Plane { get;set; } = default!;
-
+        //  public IList<Plane> Plane { get;set; } = default!;
+        public IList<Plane> Plane { get; set; }
         public async Task OnGetAsync()
         {
-            if (_context.Plane != null)
+            var planes = from i in Context.Plane
+                         select i;
+
+            var isAdmin = User.IsInRole(Constants.PlaneAdminRole);
+            
+            var currentUserId = UserManager.GetUserId(User);
+
+            if(isAdmin == false)
             {
-                Plane = await _context.Plane.ToListAsync();
+                planes = planes.Where(i => i.CreatorId == currentUserId);
             }
+
+            Plane = await planes.ToListAsync();
+            /*Plane = await Context.Plane
+                .Where(i => i.CreatorId == currentUserId)
+                .ToListAsync();*/
+            
         }
     }
 }

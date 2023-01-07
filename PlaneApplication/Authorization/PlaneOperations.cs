@@ -23,5 +23,8 @@ namespace PlaneApplication.Authorization
         public static readonly string ReadOperationName = "Read";
         public static readonly string UpdateOperationName = "Update";
         public static readonly string DeleteOperationName = "Delete";
+
+        public static readonly string PlaneUserRole = "PlaneUser";
+        public static readonly string PlaneAdminRole = "PlaneAdmin";
     }
 }

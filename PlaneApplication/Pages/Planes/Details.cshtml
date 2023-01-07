@@ -1,4 +1,9 @@
 ﻿@page
+@using PlaneApplication.Authorization
+@using PlaneApplication.Models
+@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
 @model PlaneApplication.Pages.Planes.DetailsModel
 
 @{
